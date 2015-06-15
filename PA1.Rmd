@@ -1,0 +1,70 @@
+<!--***
+title: 'Reproducible Research: Peer Assessment 1'
+output:
+  html_document:
+    keep_md: yes
+  pdf_document: default
+***
+-->
+Reproducible Research:  Peer Assessment 1
+===
+
+## Loading and preprocessing the data
+Read zip file from public URL, unzip, and store locally.  Load local .csv file into dataframe.
+
+<!-- #echo=FALSE, results='asis' -->
+```{r}
+if(!file.exists('./raw_data/')){dir.create('./raw_data/')}
+fileUrl <- 'https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip'
+temp <- tempfile()
+download.file(fileUrl, temp, method = 'curl')
+unzip(temp, exdir = './raw_data')
+unlink(temp)
+
+df.activity <- read.csv("./raw_data/activity.csv")
+
+summary(df.activity)
+
+```
+
+
+```{r}
+# Omit all rows with "NA" values
+df.activity.omit <- na.omit(df.activity)
+
+# Aggregate activity data as total steps per day
+df.daily_activity <- aggregate(steps ~ date, df.activity.omit, sum)
+```
+<!--knitr::kable(head(mtcars, 10)) -->
+
+## What is mean total number of steps taken per day?
+
+```{r}
+library(ggplot2)
+library(scales)
+library(date)
+#png(filename = "plot1.png",
+#             width = 960, height = 480, units = "px",
+#             pointsize = 12, bg = "white")
+
+plot1 <- ggplot(df.daily_activity, aes(date)) +
+                geom_histogram(aes(weight = steps, fill = ..count..),
+                               color="white", binwidth = 1) +
+                xlab("Date") + ylab("Steps Per Day") +
+                ggtitle("Steps Taken Per Day") +
+                theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+print(plot1)
+#dev.off()
+
+```
+
+## What is the average daily activity pattern?
+
+
+
+## Imputing missing values
+
+
+
+## Are there differences in activity patterns between weekdays and weekends?

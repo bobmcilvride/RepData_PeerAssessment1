@@ -1,0 +1,17 @@
+{
+    "contents" : "<!--***\ntitle: 'Reproducible Research: Peer Assessment 1'\noutput:\n  html_document:\n    keep_md: yes\n  pdf_document: default\n***\n-->\nReproducible Research:  Peer Assessment 1\n===\n\n## Loading and preprocessing the data\nRead zip file from public URL, unzip, and store locally.  Load local .csv file into dataframe.\n\n<!-- #echo=FALSE, results='asis' -->\n```{r}\nif(!file.exists('./raw_data/')){dir.create('./raw_data/')}\nfileUrl <- 'https://d396qusza40orc.cloudfront.net/repdata%2Fdata%2Factivity.zip'\ntemp <- tempfile()\ndownload.file(fileUrl, temp, method = 'curl')\nunzip(temp, exdir = './raw_data')\nunlink(temp)\n\ndf.activity <- read.csv(\"./raw_data/activity.csv\")\n\nsummary(df.activity)\n\n```\n\n\n```{r}\n# Omit all rows with \"NA\" values\ndf.activity.omit <- na.omit(df.activity)\n\n# Aggregate activity data as total steps per day\ndf.daily_activity <- aggregate(steps ~ date, df.activity.omit, sum)\n```\n<!--knitr::kable(head(mtcars, 10)) -->\n\n## What is mean total number of steps taken per day?\n\n```{r}\nlibrary(ggplot2)\nlibrary(scales)\nlibrary(date)\n#png(filename = \"plot1.png\",\n#             width = 960, height = 480, units = \"px\",\n#             pointsize = 12, bg = \"white\")\n\nplot1 <- ggplot(df.daily_activity, aes(date)) +\n                geom_histogram(aes(weight = steps, fill = ..count..),\n                               color=\"white\", binwidth = 1) +\n                xlab(\"Date\") + ylab(\"Steps Per Day\") +\n                ggtitle(\"Steps Taken Per Day\") +\n                theme(axis.text.x = element_text(angle = 90, hjust = 1))\n\nprint(plot1)\n#dev.off()\n\n```\n\nThe mean number of steps taken per day is `r mean(df.daily_activity$steps)`.\n\nThe median number of steps taken per day is `r median(df.daily_activity$steps)`.\n\n\n## What is the average daily activity pattern?\n\n\n\n## Imputing missing values\n\n\n\n## Are there differences in activity patterns between weekdays and weekends?\n",
+    "created" : 1434318648520.000,
+    "dirty" : true,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3939724087",
+    "id" : "8E6FC044",
+    "lastKnownWriteTime" : 1434329739,
+    "path" : "~/Github/RepData_PeerAssessment1/PA1.Rmd",
+    "project_path" : "PA1.Rmd",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "type" : "r_markdown"
+}
